@@ -19,6 +19,12 @@ class Config:
     max_research_loops: int
     tavily_max_results: int
     fetch_full_page: bool
+    mail_to: str = ""
+    mail_from: str = ""
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_password: str = ""
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -32,6 +38,12 @@ class Config:
             max_research_loops=int(os.getenv("MAX_RESEARCH_LOOPS", "3")),
             tavily_max_results=int(os.getenv("TAVILY_MAX_RESULTS", "3")),
             fetch_full_page=_bool(os.getenv("FETCH_FULL_PAGE", "false")),
+            mail_to=os.getenv("MAIL_TO", ""),
+            mail_from=os.getenv("MAIL_FROM", ""),
+            smtp_host=os.getenv("SMTP_HOST", "smtp.gmail.com"),
+            smtp_port=int(os.getenv("SMTP_PORT", "587")),
+            smtp_user=os.getenv("SMTP_USER", ""),
+            smtp_password=os.getenv("SMTP_PASSWORD", ""),
         )
 
     def validate(self) -> None:

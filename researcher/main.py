@@ -9,6 +9,7 @@ from rich.panel import Panel
 
 from .agent import ResearchAgent, build_report
 from .config import Config
+from .mailer import send_report
 
 console = Console()
 
@@ -36,6 +37,8 @@ def main() -> None:
     parser.add_argument("topic", nargs="?", help="調査タスク（省略時は対話入力）")
     parser.add_argument("-n", "--loops", type=int, help="調査ループ回数（.env の MAX_RESEARCH_LOOPS を上書き）")
     parser.add_argument("-o", "--output-dir", default="reports", help="レポート保存先ディレクトリ")
+    parser.add_argument("--mail-to", help="レポートの送信先メールアドレス（.env の MAIL_TO を上書き）")
+    parser.add_argument("--no-mail", action="store_true", help="メール送信しない")
     args = parser.parse_args()
 
     config = Config.from_env()
@@ -62,6 +65,14 @@ def main() -> None:
     path = out_dir / f"{datetime.now():%Y%m%d_%H%M%S}_{slug}.md"
     path.write_text(report, encoding="utf-8")
     console.print(f"\n[bold green]レポートを保存しました:[/] {path}")
+
+    mail_to = args.mail_to or config.mail_to
+    if mail_to and not args.no_mail:
+        try:
+            send_report(config, mail_to, f"調査レポート: {topic[:60]}", path)
+            console.print(f"[bold green]メールを送信しました:[/] {mail_to}")
+        except Exception as e:
+            console.print(f"[bold red]メール送信に失敗しました:[/] {e}")
 
 
 if __name__ == "__main__":

@@ -47,3 +47,20 @@ uv run researcher "1 行目
 ```
 
 ※ `$` やバッククォートを含む場合はシングルクォート `'...'` で囲む。
+
+## レポートのメール送信
+
+`.env` に `MAIL_TO` と SMTP 設定を記入すると、調査終了後にレポートを自動でメール送信する
+（本文にレポート、`.md` ファイルを添付）。`MAIL_TO` が空なら送信しない。
+
+Gmail の場合:
+1. Google アカウントで 2 段階認証を有効にする
+2. https://myaccount.google.com/apppasswords で「アプリ パスワード」を発行
+3. `.env` に記入
+   ```
+   MAIL_TO=送信先@example.com
+   SMTP_USER=自分のアドレス@gmail.com
+   SMTP_PASSWORD=発行したアプリパスワード(16文字)
+   ```
+
+一時的に宛先を変える: `--mail-to other@example.com` / 送信しない: `--no-mail`
