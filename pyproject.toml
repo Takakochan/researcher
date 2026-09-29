@@ -1,0 +1,18 @@
+[project]
+name = "researcher"
+version = "0.1.0"
+description = "Iterative web research agent using Token Factory (LLM) and Tavily (search)"
+requires-python = ">=3.10"
+dependencies = [
+    "openai>=1.40",
+    "tavily-python>=0.5",
+    "python-dotenv>=1.0",
+    "rich>=13.0",
+]
+
+[project.scripts]
+researcher = "researcher.main:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
