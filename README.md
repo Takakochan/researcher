@@ -64,3 +64,31 @@ Gmail の場合:
    ```
 
 一時的に宛先を変える: `--mail-to other@example.com` / 送信しない: `--no-mail`
+
+## Discord から実行する
+
+Discord で `/research topic:調査タスク` と送ると調査を実行し、途中経過と最終レポート（ファイル添付）を投稿する。
+`MAIL_TO` が設定されていればメールでも送信する。
+
+### 初回セットアップ
+
+1. https://discord.com/developers/applications で「New Application」を作成
+2. 左メニュー「Bot」→「Reset Token」でトークンを発行し、`.env` の `DISCORD_BOT_TOKEN` に記入
+3. 左メニュー「OAuth2」→「OAuth2 URL Generator」で
+   - SCOPES: `bot` と `applications.commands` にチェック
+   - BOT PERMISSIONS: `Send Messages`、`Attach Files`、`Embed Links`、`Read Message History` にチェック
+   - 生成された URL をブラウザで開き、自分のサーバーにボットを招待
+4. Discord の「設定 → 詳細設定 → 開発者モード」をオンにし、
+   - 自分のアイコンを右クリック →「ユーザー ID をコピー」→ `.env` の `DISCORD_ALLOWED_USER_IDS` に記入
+   - サーバー名を右クリック →「サーバー ID をコピー」→ `.env` の `DISCORD_GUILD_ID` に記入
+
+### 起動
+
+- Windows: `bot.bat` をダブルクリック（ウィンドウを開いている間だけ動作）
+- Mac: `uv run researcher-bot`
+
+`Logged in as ...` と表示されたら準備完了。サーバーのチャンネル、またはボットとの DM で `/research` を実行する。
+
+### Windows 起動時に自動でボットを起動する
+
+`Win + R` → `shell:startup` で開いたフォルダに、`bot.bat` のショートカットを置く。

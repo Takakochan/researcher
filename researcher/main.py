@@ -1,13 +1,11 @@
 import argparse
-import re
-from datetime import datetime
 from pathlib import Path
 
 from rich.console import Console
 from rich.markdown import Markdown
 from rich.panel import Panel
 
-from .agent import ResearchAgent, build_report
+from .agent import ResearchAgent, build_report, save_report
 from .config import Config
 from .mailer import send_report
 
@@ -59,11 +57,7 @@ def main() -> None:
     console.rule("[bold]最終レポート")
     console.print(Markdown(report))
 
-    out_dir = Path(args.output_dir)
-    out_dir.mkdir(parents=True, exist_ok=True)
-    slug = re.sub(r"[^\w\-]+", "_", topic)[:40].strip("_")
-    path = out_dir / f"{datetime.now():%Y%m%d_%H%M%S}_{slug}.md"
-    path.write_text(report, encoding="utf-8")
+    path = save_report(report, topic, Path(args.output_dir))
     console.print(f"\n[bold green]レポートを保存しました:[/] {path}")
 
     mail_to = args.mail_to or config.mail_to

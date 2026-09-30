@@ -8,10 +8,12 @@ dependencies = [
     "tavily-python>=0.5",
     "python-dotenv>=1.0",
     "rich>=13.0",
+    "discord.py>=2.4",
 ]
 
 [project.scripts]
 researcher = "researcher.main:main"
+researcher-bot = "researcher.bot:main"
 
 [build-system]
 requires = ["hatchling"]

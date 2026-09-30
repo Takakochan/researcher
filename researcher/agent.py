@@ -1,5 +1,7 @@
+import re
 from dataclasses import dataclass, field
-from datetime import date
+from datetime import date, datetime
+from pathlib import Path
 from typing import Callable
 
 from .config import Config
@@ -112,3 +114,11 @@ def build_report(state: ResearchState) -> str:
         f"## 使用した検索クエリ\n\n" + "\n".join(query_lines) + "\n\n"
         f"## 情報源\n\n" + "\n".join(source_lines) + "\n"
     )
+
+
+def save_report(report: str, topic: str, out_dir: Path) -> Path:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    slug = re.sub(r"[^\w\-]+", "_", topic)[:40].strip("_")
+    path = out_dir / f"{datetime.now():%Y%m%d_%H%M%S}_{slug}.md"
+    path.write_text(report, encoding="utf-8")
+    return path

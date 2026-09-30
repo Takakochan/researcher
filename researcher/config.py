@@ -25,6 +25,9 @@ class Config:
     smtp_port: int = 587
     smtp_user: str = ""
     smtp_password: str = ""
+    discord_bot_token: str = ""
+    discord_allowed_user_ids: frozenset[int] = frozenset()
+    discord_guild_id: int | None = None
 
     @classmethod
     def from_env(cls) -> "Config":
@@ -44,6 +47,11 @@ class Config:
             smtp_port=int(os.getenv("SMTP_PORT", "587")),
             smtp_user=os.getenv("SMTP_USER", ""),
             smtp_password=os.getenv("SMTP_PASSWORD", ""),
+            discord_bot_token=os.getenv("DISCORD_BOT_TOKEN", ""),
+            discord_allowed_user_ids=frozenset(
+                int(x) for x in os.getenv("DISCORD_ALLOWED_USER_IDS", "").split(",") if x.strip()
+            ),
+            discord_guild_id=int(os.getenv("DISCORD_GUILD_ID") or 0) or None,
         )
 
     def validate(self) -> None:
